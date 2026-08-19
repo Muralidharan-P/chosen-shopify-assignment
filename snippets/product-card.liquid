@@ -1,0 +1,117 @@
+{% liquid
+  assign product = product_card_product
+  assign current_variant = product.selected_or_first_available_variant
+  assign product_image = current_variant.featured_media.preview_image | default: product.featured_media.preview_image
+  assign color_option = blank
+
+  for option in product.options_with_values
+    assign option_name = option.name | downcase
+    if option_name == 'color' or option_name == 'colour'
+      assign color_option = option
+      break
+    endif
+  endfor
+
+  assign discount = 0
+  if current_variant.compare_at_price > current_variant.price
+    assign discount = current_variant.compare_at_price | minus: current_variant.price | times: 100.0 | divided_by: current_variant.compare_at_price | round
+  endif
+%}
+
+<div class="tt-product-card">
+
+  <a
+    href="{{ product.url }}"
+    class="tt-product-card__image-link"
+    aria-label="{{ product.title | escape }}"
+  >
+    <div class="tt-product-card__image-wrapper">
+
+      <div class="tt-product-card__badges">
+        <span class="tt-product-card__badge tt-product-card__badge--bestseller">Best Seller</span>
+        <span class="tt-product-card__badge tt-product-card__badge--discount"{% if discount <= 0 %} hidden{% endif %}>-{{ discount }}%</span>
+      </div>
+
+      {% if product_image != blank %}
+        {{
+          product_image
+          | image_url: width: 900
+          | image_tag:
+            loading: 'lazy',
+            widths: '300, 450, 600, 750, 900',
+            class: 'tt-product-card__image tt-product-card__main-image',
+            alt: product.title
+        }}
+      {% else %}
+        {{ 'product-1' | placeholder_svg_tag: 'tt-product-card__placeholder' }}
+      {% endif %}
+
+    </div>
+  </a>
+
+  <div class="tt-product-card__content">
+
+    <a href="{{ product.url }}" class="tt-product-card__title">
+      {{ product.title }}
+    </a>
+
+    {% if color_option != blank %}
+      <div class="tt-product-card__swatches">
+
+        {% for value in color_option.values limit: 4 %}
+
+          {% assign color_variant = value.variant %}
+
+          {% if color_variant != blank %}
+
+            {% assign variant_image = color_variant.featured_media.preview_image | default: product_image %}
+            {% assign variant_discount = 0 %}
+            {% if color_variant.compare_at_price > color_variant.price %}
+              {% assign variant_discount = color_variant.compare_at_price | minus: color_variant.price | times: 100.0 | divided_by: color_variant.compare_at_price | round %}
+            {% endif %}
+
+            <button
+              type="button"
+              class="tt-product-card__swatch{% if color_variant.id == current_variant.id %} is-active{% endif %}"
+              title="{{ value.name | escape }}"
+              aria-label="{{ value.name | escape }}"
+              data-variant-id="{{ color_variant.id }}"
+              data-image="{% if variant_image != blank %}{{ variant_image | image_url: width: 900 }}{% endif %}"
+              data-price="{{ color_variant.price | money }}"
+              data-compare-price="{% if color_variant.compare_at_price > color_variant.price %}{{ color_variant.compare_at_price | money }}{% endif %}"
+              data-discount="{{ variant_discount }}"
+  style="
+  {% if value.swatch.color %}
+    background-color: {{ value.swatch.color }};
+  {% elsif value.swatch.image %}
+    background-image: url('{{ value.swatch.image | image_url: width: 50 }}');
+  {% else %}
+    background-color: #dddddd;
+  {% endif %}
+"
+            ></button>
+
+          {% endif %}
+
+        {% endfor %}
+
+      </div>
+    {% endif %}
+
+    <div class="tt-product-card__price">
+
+      <span class="tt-product-card__price-current">
+        {{ current_variant.price | money }}
+      </span>
+
+      <s class="tt-product-card__price-compare"{% unless current_variant.compare_at_price > current_variant.price %} hidden{% endunless %}>
+        {% if current_variant.compare_at_price > current_variant.price %}
+          {{ current_variant.compare_at_price | money }}
+        {% endif %}
+      </s>
+
+    </div>
+
+  </div>
+
+</div>
