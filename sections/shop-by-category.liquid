@@ -1,0 +1,437 @@
+{% style %}
+  #shop-by-category-{{ section.id }} {
+    --sbc-heading-color: {{ section.settings.heading_color }};
+    --sbc-heading-bg: {{ section.settings.heading_background }};
+    --sbc-button-text: {{ section.settings.button_text_color }};
+    --sbc-button-bg: {{ section.settings.button_background }};
+    --sbc-button-hover-text: {{ section.settings.button_hover_text_color }};
+    --sbc-button-hover-bg: {{ section.settings.button_hover_background }};
+
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+
+  #shop-by-category-{{ section.id }} .shop-by-category__heading {
+    margin: 0;
+    padding: 0 {{ section.settings.section_padding_horizontal }}px 8px;
+
+    background: var(--sbc-heading-bg);
+    color: var(--sbc-heading-color);
+
+    font-size: {{ section.settings.heading_font_size }}px;
+    font-weight: {{ section.settings.heading_font_weight }};
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+  }
+
+  #shop-by-category-{{ section.id }} .shop-by-category__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  #shop-by-category-{{ section.id }} .shop-by-category__card {
+    position: relative;
+    min-height: {{ section.settings.card_height }}px;
+    overflow: hidden;
+  }
+.shop-by-category{
+    background:#F4F4F4;
+}
+  #shop-by-category-{{ section.id }} .shop-by-category__image-wrap {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  #shop-by-category-{{ section.id }} .shop-by-category__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+      transition: transform 0.9s ease;
+  }
+  .shop-by-category__card:hover img{
+    transform: scale(1.2);
+  }
+
+  #shop-by-category-{{ section.id }} .shop-by-category__content {
+    position: absolute;
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  #shop-by-category-{{ section.id }} .shop-by-category__content .tt-hero__button {
+    pointer-events: auto;
+
+    --tt-button-text: var(--sbc-button-text);
+    --tt-button-bg: var(--sbc-button-bg);
+    --tt-button-hover-text: var(--sbc-button-hover-text);
+    --tt-button-hover-bg: var(--sbc-button-hover-bg);
+
+    margin-top: 0;
+  }
+
+  @media screen and (max-width: 989px) {
+    #shop-by-category-{{ section.id }} .shop-by-category__heading {
+      font-size: 30px;
+    }
+
+    #shop-by-category-{{ section.id }} .shop-by-category__card {
+      min-height: 400px;
+    }
+
+    #shop-by-category-{{ section.id }} .shop-by-category__content .tt-hero__button {
+      padding: 18px 24px;
+      font-size: 18px;
+    }
+
+    #shop-by-category-{{ section.id }} .shop-by-category__content .tt-hero__button-icon {
+      width: 17px;
+      height: 17px;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    #shop-by-category-{{ section.id }} {
+      padding-top: {{ section.settings.mobile_padding_top }}px;
+      padding-bottom: {{ section.settings.mobile_padding_bottom }}px;
+    }
+
+    #shop-by-category-{{ section.id }} .shop-by-category__heading {
+      padding: 0 {{ section.settings.mobile_section_padding_horizontal }}px 8px;
+      font-size: {{ section.settings.mobile_heading_font_size }}px;
+    }
+
+    #shop-by-category-{{ section.id }} .shop-by-category__grid {
+      grid-template-columns: 1fr;
+    }
+
+    #shop-by-category-{{ section.id }} .shop-by-category__card {
+      min-height: {{ section.settings.mobile_card_height }}px;
+    }
+
+    #shop-by-category-{{ section.id }} .shop-by-category__content .tt-hero__button {
+      padding: 16px 22px;
+      font-size: 16px;
+      gap: 10px;
+    }
+
+    #shop-by-category-{{ section.id }} .shop-by-category__content .tt-hero__button-icon {
+      width: 16px;
+      height: 16px;
+    }
+  }
+{% endstyle %}
+
+<section
+  id="shop-by-category-{{ section.id }}"
+  class="shop-by-category {{ section.settings.parent_class }}"
+>
+  {% if section.settings.heading != blank %}
+    <h2 class="shop-by-category__heading">
+      {{ section.settings.heading }}
+    </h2>
+  {% endif %}
+
+  <div class="shop-by-category__grid">
+    {% for block in section.blocks %}
+      <div
+        class="shop-by-category__card"
+        {{ block.shopify_attributes }}
+      >
+        <div class="shop-by-category__image-wrap">
+          {% if block.settings.image != blank %}
+            {{
+              block.settings.image
+              | image_url: width: 1200
+              | image_tag:
+                class: 'shop-by-category__image',
+                loading: 'lazy',
+                widths: '400, 600, 800, 1000, 1200',
+                alt: block.settings.image.alt
+            }}
+          {% else %}
+            {{ 'lifestyle-1' | placeholder_svg_tag: 'shop-by-category__image' }}
+          {% endif %}
+        </div>
+
+        {% if block.settings.button_label != blank %}
+          <div class="shop-by-category__content">
+            <a
+              href="{{ block.settings.button_link | default: '#' }}"
+              class="tt-hero__button"
+            >
+              <span class="tt-hero__button-text">
+                {{ block.settings.button_label }}
+              </span>
+
+              <img
+                src="https://cdn.shopify.com/s/files/1/0698/2320/1351/files/Arrow.svg?v=1787057669"
+                alt=""
+                class="tt-hero__button-icon"
+                width="18"
+                height="18"
+                loading="lazy"
+              >
+            </a>
+          </div>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Shop by Category",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "parent_class",
+      "label": "Parent CSS class",
+      "default": "shop-by-category-section" 
+    },
+    {
+      "type": "header",
+      "content": "Section spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Desktop padding top",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Desktop padding bottom",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_top",
+      "label": "Mobile padding top",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_bottom",
+      "label": "Mobile padding bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Shop by Category"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#1C1C1C"
+    },
+    {
+      "type": "color",
+      "id": "heading_background",
+      "label": "Heading background",
+      "default": "#F4F4F4"
+    },
+    {
+      "type": "range",
+      "id": "heading_font_size",
+      "label": "Desktop heading font size",
+      "min": 20,
+      "max": 100,
+      "step": 1,
+      "default": 34,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "mobile_heading_font_size",
+      "label": "Mobile heading font size",
+      "min": 18,
+      "max": 60,
+      "step": 1,
+      "default": 28,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "heading_font_weight",
+      "label": "Heading font weight",
+      "default": "500",
+      "options": [
+        {
+          "value": "400",
+          "label": "Regular"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi Bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "section_padding_horizontal",
+      "label": "Desktop horizontal padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 8,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "mobile_section_padding_horizontal",
+      "label": "Mobile horizontal padding",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "default": 6,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Category cards"
+    },
+    {
+      "type": "range",
+      "id": "card_height",
+      "label": "Desktop card height",
+      "min": 200,
+      "max": 900,
+      "step": 10,
+      "default": 520,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "mobile_card_height",
+      "label": "Mobile card height",
+      "min": 200,
+      "max": 700,
+      "step": 10,
+      "default": 380,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Button colors"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Button background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_text_color",
+      "label": "Button hover text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_background",
+      "label": "Button hover background",
+      "default": "#111111"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Category image"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "Shop Category"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shop by Category",
+      "blocks": [
+        {
+          "type": "category",
+          "settings": {
+            "button_label": "Shoes"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "button_label": "Apparel"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "button_label": "Accessories"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

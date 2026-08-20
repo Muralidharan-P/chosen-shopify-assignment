@@ -1,0 +1,320 @@
+<section
+  id="tt-testimonials-{{ section.id }}"
+  class="tt-testimonials {{ section.settings.parent_class }}"
+  style="
+    --tt-heading-size: {{ section.settings.heading_font_size }}px;
+    --tt-mobile-heading-size: {{ section.settings.mobile_heading_font_size }}px;
+    --tt-testimonial-size: {{ section.settings.testimonial_font_size }}px;
+    --tt-mobile-testimonial-size: {{ section.settings.mobile_testimonial_font_size }}px;
+    --tt-author-size: {{ section.settings.author_font_size }}px;
+    --tt-mobile-author-size: {{ section.settings.mobile_author_font_size }}px;
+    --tt-heading-color: {{ section.settings.heading_color }};
+    --tt-text-color: {{ section.settings.text_color }};
+    --tt-author-color: {{ section.settings.author_color }};
+    --tt-border-color: {{ section.settings.border_color }};
+    --tt-background: {{ section.settings.background_color }};
+    --tt-padding-top: {{ section.settings.padding_top }}px;
+    --tt-padding-bottom: {{ section.settings.padding_bottom }}px;
+  "
+>
+  <div class="tt-testimonials__inner">
+
+    {% if section.settings.heading != blank %}
+      <h2 class="tt-testimonials__heading">
+        {{ section.settings.heading }}
+      </h2>
+    {% endif %}
+
+    <div class="tt-testimonials__grid">
+      {% for block in section.blocks %}
+        <div
+          class="tt-testimonials__card"
+          {{ block.shopify_attributes }}
+        >
+          {% if block.settings.testimonial != blank %}
+            <div class="tt-testimonials__text">
+              {{ block.settings.testimonial }}
+            </div>
+          {% endif %}
+
+          {% if block.settings.author != blank %}
+            <div class="tt-testimonials__author">
+              {{ block.settings.author }}
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+
+<style>
+  #tt-testimonials-{{ section.id }} {
+    width: 100%;
+    background: var(--tt-background);
+    padding-top: var(--tt-padding-top);
+    padding-bottom: var(--tt-padding-bottom);
+  }
+
+  #tt-testimonials-{{ section.id }} .tt-testimonials__inner {
+    width: 100%;
+  }
+
+  #tt-testimonials-{{ section.id }} .tt-testimonials__heading {
+    margin: 0;
+    padding: 0 6px 7px;
+
+    color: var(--tt-heading-color);
+
+    font-size: var(--tt-heading-size);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    font-weight: 400;
+  }
+
+  #tt-testimonials-{{ section.id }} .tt-testimonials__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    border-top: 1px solid var(--tt-border-color);
+    border-bottom: 1px solid var(--tt-border-color);
+  }
+
+  #tt-testimonials-{{ section.id }} .tt-testimonials__card {
+    min-width: 0;
+    min-height: 74px;
+
+    padding: 8px 10px 9px 5px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  #tt-testimonials-{{ section.id }} .tt-testimonials__card:not(:last-child) {
+    border-right: 1px solid var(--tt-border-color);
+  }
+
+  #tt-testimonials-{{ section.id }} .tt-testimonials__text {
+    color: var(--tt-text-color);
+
+    font-size: var(--tt-testimonial-size);
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    font-weight: 400;
+  }
+
+  #tt-testimonials-{{ section.id }} .tt-testimonials__author {
+    margin-top: 8px;
+
+    color: var(--tt-author-color);
+
+    font-size: var(--tt-author-size);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-weight: 400;
+  }
+
+  @media screen and (max-width: 749px) {
+    #tt-testimonials-{{ section.id }} .tt-testimonials__heading {
+      padding: 0 5px 8px;
+
+      font-size: var(--tt-mobile-heading-size);
+      line-height: 0.95;
+    }
+
+    #tt-testimonials-{{ section.id }} .tt-testimonials__grid {
+      grid-template-columns: 1fr;
+    }
+
+    #tt-testimonials-{{ section.id }} .tt-testimonials__card {
+      min-height: auto;
+      padding: 14px 8px 14px 5px;
+    }
+
+    #tt-testimonials-{{ section.id }} .tt-testimonials__card:not(:last-child) {
+      border-right: 0;
+      border-bottom: 1px solid var(--tt-border-color);
+    }
+
+    #tt-testimonials-{{ section.id }} .tt-testimonials__text {
+      font-size: var(--tt-mobile-testimonial-size);
+    }
+
+    #tt-testimonials-{{ section.id }} .tt-testimonials__author {
+      font-size: var(--tt-mobile-author-size);
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "From the Fam",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "parent_class",
+      "label": "Parent CSS class"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "From the Fam"
+    },
+    {
+      "type": "range",
+      "id": "heading_font_size",
+      "min": 30,
+      "max": 120,
+      "step": 1,
+      "unit": "px",
+      "label": "Heading font size",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "mobile_heading_font_size",
+      "min": 24,
+      "max": 80,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile heading font size",
+      "default": 44
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#111111"
+    },
+    {
+      "type": "range",
+      "id": "testimonial_font_size",
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Testimonial font size",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "mobile_testimonial_font_size",
+      "min": 10,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile testimonial font size",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Testimonial text color",
+      "default": "#111111"
+    },
+    {
+      "type": "range",
+      "id": "author_font_size",
+      "min": 8,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Author font size",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "mobile_author_font_size",
+      "min": 8,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile author font size",
+      "default": 11
+    },
+    {
+      "type": "color",
+      "id": "author_color",
+      "label": "Author color",
+      "default": "#777777"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border color",
+      "default": "#b8b8b8"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#f5f5f5"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 200,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 24
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "testimonial",
+          "label": "Testimonial",
+          "default": "These are hands-down the most comfortable sneakers I've ever trained in. Zero break-in time, perfect fit."
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author",
+          "default": "Mark D., Toronto"
+        }
+      ]
+    }
+  ],
+  "presets": [
+  {
+    "name": "From the Fam",
+    "blocks": [
+      {
+        "type": "testimonial"
+      },
+      {
+        "type": "testimonial"
+      },
+      {
+        "type": "testimonial"
+      }
+    ]
+  }
+]
+}
+{% endschema %}

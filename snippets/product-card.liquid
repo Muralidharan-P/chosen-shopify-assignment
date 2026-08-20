@@ -27,11 +27,20 @@
   >
     <div class="tt-product-card__image-wrapper">
 
-      <div class="tt-product-card__badges">
-        <span class="tt-product-card__badge tt-product-card__badge--bestseller">Best Seller</span>
-        <span class="tt-product-card__badge tt-product-card__badge--discount"{% if discount <= 0 %} hidden{% endif %}>-{{ discount }}%</span>
-      </div>
+     <div class="tt-product-card__badges">
+  {% if show_best_seller_badge %}
+    <span class="tt-product-card__badge tt-product-card__badge--bestseller">
+      Best Seller
+    </span>
+  {% endif %}
 
+  <span
+    class="tt-product-card__badge tt-product-card__badge--discount"
+    {% if discount <= 0 %}hidden{% endif %}
+  >
+    -{{ discount }}%
+  </span>
+</div>
       {% if product_image != blank %}
         {{
           product_image

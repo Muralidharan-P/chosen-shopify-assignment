@@ -11,32 +11,28 @@
     <div class="tt-best-sellers__viewport">
       <div class="tt-best-sellers__products">
 
-        {% if section.settings.collection != blank %}
+        {% assign selected_products = 0 %}
 
-          {% for product in section.settings.collection.products limit: section.settings.products_to_show %}
+{% for i in (1..12) %}
+  {% assign product_key = 'product_' | append: i %}
+  {% assign selected_product = section.settings[product_key] %}
 
-            <div class="tt-best-sellers__product">
-             {% render 'product-card',
-  product_card_product: product,
-  show_best_seller_badge: true
-%}
-            </div>
+  {% if selected_product != blank %}
+    {% assign selected_products = selected_products | plus: 1 %}
 
-          {% endfor %}
+    <div class="tt-best-sellers__product">
+      {% render 'product-card', product_card_product: selected_product %}
+    </div>
+  {% endif %}
+{% endfor %}
 
-        {% else %}
-
-          {% for i in (1..5) %}
-
-            <div class="tt-best-sellers__product">
-
-              {{ 'product-' | append: i | placeholder_svg_tag }}
-
-            </div>
-
-          {% endfor %}
-
-        {% endif %}
+{% if selected_products == 0 %}
+  {% for i in (1..5) %}
+    <div class="tt-best-sellers__product">
+      {{ 'product-' | append: i | placeholder_svg_tag }}
+    </div>
+  {% endfor %}
+{% endif %}
 
       </div>
     </div>
@@ -138,7 +134,6 @@
   ========================= */
 
   #tt-best-sellers-{{ section.id }} .tt-best-sellers__heading {
-
     display: flex;
     align-items: center;
     padding: 0 8px;
@@ -152,7 +147,7 @@
     font-size: 80px;
     line-height: 1;
     font-weight: 500;
-  
+
   }
 
 
@@ -1134,50 +1129,96 @@ gap:15px;
 
 {% schema %}
 {
-  "name": "Best Sellers",
-
+  "name": "You May Be Interested In",
   "settings": [
-
     {
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "Best Sellers"
+      "default": "You May Be Interested In"
     },
-
     {
-      "type": "collection",
-      "id": "collection",
-      "label": "Select collection"
+      "type": "header",
+      "content": "Select products"
     },
-
     {
-      "type": "range",
-      "id": "products_to_show",
-      "label": "Products to show",
-      "min": 4,
-      "max": 12,
-      "step": 1,
-      "default": 8
+      "type": "product",
+      "id": "product_1",
+      "label": "Product 1"
     },
-
+    {
+      "type": "product",
+      "id": "product_2",
+      "label": "Product 2"
+    },
+    {
+      "type": "product",
+      "id": "product_3",
+      "label": "Product 3"
+    },
+    {
+      "type": "product",
+      "id": "product_4",
+      "label": "Product 4"
+    },
+    {
+      "type": "product",
+      "id": "product_5",
+      "label": "Product 5"
+    },
+    {
+      "type": "product",
+      "id": "product_6",
+      "label": "Product 6"
+    },
+    {
+      "type": "product",
+      "id": "product_7",
+      "label": "Product 7"
+    },
+    {
+      "type": "product",
+      "id": "product_8",
+      "label": "Product 8"
+    },
+    {
+      "type": "product",
+      "id": "product_9",
+      "label": "Product 9"
+    },
+    {
+      "type": "product",
+      "id": "product_10",
+      "label": "Product 10"
+    },
+    {
+      "type": "product",
+      "id": "product_11",
+      "label": "Product 11"
+    },
+    {
+      "type": "product",
+      "id": "product_12",
+      "label": "Product 12"
+    },
+    {
+      "type": "header",
+      "content": "Slider arrows"
+    },
     {
       "type": "image_picker",
       "id": "left_arrow",
       "label": "Left arrow image"
     },
-
     {
       "type": "image_picker",
       "id": "right_arrow",
       "label": "Right arrow image"
     }
-
   ],
-
   "presets": [
     {
-      "name": "Best Sellers"
+      "name": "You May Be Interested In"
     }
   ]
 }
