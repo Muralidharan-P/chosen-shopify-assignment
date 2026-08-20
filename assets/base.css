@@ -2168,6 +2168,12 @@ input[type='checkbox'] {
 .utility-bar {
   height: 100%;
 }
+.instagram-section{
+  padding: 50px 0px;
+}
+.testimonials{
+  padding-top:50px;
+}
 
 .utility-bar--bottom-border {
   border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.08);

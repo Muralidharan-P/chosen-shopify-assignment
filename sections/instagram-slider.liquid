@@ -1,0 +1,343 @@
+<section
+  id="instagram-section-{{ section.id }}"
+  class="instagram-section"
+>
+  <div class="instagram-section__header">
+    <h2>{{ section.settings.heading }}</h2>
+    <p>{{ section.settings.handle }}</p>
+  </div>
+
+  <div class="instagram-section__slider">
+    <div class="instagram-section__track">
+      {% for block in section.blocks %}
+        <div class="instagram-section__item" {{ block.shopify_attributes }}>
+          {% if block.settings.image != blank %}
+            {{
+              block.settings.image
+              | image_url: width: 1000
+              | image_tag: class: 'instagram-section__image'
+            }}
+          {% else %}
+            <div class="instagram-section__placeholder">
+              Add Image
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="instagram-section__bottom">
+    <div class="instagram-section__dots"></div>
+
+    <div class="instagram-section__arrows">
+      <button
+        type="button"
+        class="instagram-section__arrow instagram-section__prev"
+        aria-label="Previous"
+      >
+        {% if section.settings.prev_arrow != blank %}
+          {{
+            section.settings.prev_arrow
+            | image_url: width: 100
+            | image_tag
+          }}
+        {% else %}
+          <span>←</span>
+        {% endif %}
+      </button>
+
+      <button
+        type="button"
+        class="instagram-section__arrow instagram-section__next"
+        aria-label="Next"
+      >
+        {% if section.settings.next_arrow != blank %}
+          {{
+            section.settings.next_arrow
+            | image_url: width: 100
+            | image_tag
+          }}
+        {% else %}
+          <span>→</span>
+        {% endif %}
+      </button>
+    </div>
+  </div>
+</section>
+
+<style>
+  #instagram-section-{{ section.id }} {
+    background: #f5f5f5;
+    overflow: hidden;
+  }
+
+  #instagram-section-{{ section.id }} .instagram-section__header {
+    padding: 0 7px 8px;
+  }
+
+  #instagram-section-{{ section.id }} .instagram-section__header h2 {
+    margin: 0;
+    font-size: 80px;
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+
+  #instagram-section-{{ section.id }} .instagram-section__header p {
+    margin: 4px 0 0;
+    font-size: 14px;
+  }
+
+  #instagram-section-{{ section.id }} .instagram-section__slider {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  #instagram-section-{{ section.id }} .instagram-section__track {
+    display: flex;
+    transition: transform 0.6s ease;
+    will-change: transform;
+  }
+
+  #instagram-section-{{ section.id }} .instagram-section__item {
+    flex: 0 0 25%;
+    width: 25%;
+    min-width: 0;
+  }
+
+  #instagram-section-{{ section.id }} .instagram-section__image,
+  #instagram-section-{{ section.id }} .instagram-section__placeholder {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    height: auto;
+    object-fit: cover;
+    display: block;
+  }
+
+  #instagram-section-{{ section.id }} .instagram-section__placeholder {
+    background: #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #instagram-section-{{ section.id }} .instagram-section__bottom {
+    height: 48px;
+    border-top: 1px solid #bbb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+  }
+
+  #instagram-section-{{ section.id }} .instagram-section__dots {
+    display: flex;
+    gap: 5px;
+  }
+
+  #instagram-section-{{ section.id }} .instagram-section__dot {
+    width: 4px;
+    height: 4px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: #aaa;
+    cursor: pointer;
+  }
+
+  #instagram-section-{{ section.id }} .instagram-section__dot.active {
+    background: #111;
+  }
+
+  #instagram-section-{{ section.id }} .instagram-section__arrows {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  #instagram-section-{{ section.id }} .instagram-section__arrow {
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #instagram-section-{{ section.id }} .instagram-section__arrow span {
+    font-size: 28px;
+    line-height: 1;
+  }
+
+  #instagram-section-{{ section.id }} .instagram-section__arrow img {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+  }
+
+  @media screen and (max-width: 749px) {
+    #instagram-section-{{ section.id }} .instagram-section__header h2 {
+      font-size: 44px;
+    }
+
+    /* Mobile = exactly 1 image */
+    #instagram-section-{{ section.id }} .instagram-section__item {
+      flex: 0 0 100%;
+      width: 100%;
+    }
+  }
+</style>
+
+<script>
+  (function() {
+    var section = document.getElementById('instagram-section-{{ section.id }}');
+
+    if (!section) return;
+
+    var track = section.querySelector('.instagram-section__track');
+    var slides = section.querySelectorAll('.instagram-section__item');
+    var prev = section.querySelector('.instagram-section__prev');
+    var next = section.querySelector('.instagram-section__next');
+    var dotsContainer = section.querySelector('.instagram-section__dots');
+
+    if (!track || slides.length === 0) return;
+
+    var currentIndex = 0;
+
+    function getVisibleCount() {
+      return window.innerWidth <= 749 ? 1 : 4;
+    }
+
+    function getMaxIndex() {
+      return Math.max(0, slides.length - getVisibleCount());
+    }
+
+    function createDots() {
+      dotsContainer.innerHTML = '';
+
+      var totalDots = getMaxIndex() + 1;
+
+      for (var i = 0; i < totalDots; i++) {
+        var dot = document.createElement('button');
+
+        dot.type = 'button';
+        dot.className = 'instagram-section__dot';
+
+        if (i === currentIndex) {
+          dot.classList.add('active');
+        }
+
+        dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+
+        (function(index) {
+          dot.addEventListener('click', function() {
+            currentIndex = index;
+            updateSlider();
+          });
+        })(i);
+
+        dotsContainer.appendChild(dot);
+      }
+    }
+
+    function updateSlider() {
+      var maxIndex = getMaxIndex();
+
+      if (currentIndex > maxIndex) currentIndex = maxIndex;
+      if (currentIndex < 0) currentIndex = 0;
+
+      var slideWidth = slides[0].getBoundingClientRect().width;
+
+      track.style.transform =
+        'translate3d(-' + (currentIndex * slideWidth) + 'px, 0, 0)';
+
+      var dots = dotsContainer.querySelectorAll('.instagram-section__dot');
+
+      dots.forEach(function(dot, index) {
+        dot.classList.toggle('active', index === currentIndex);
+      });
+    }
+
+    next.addEventListener('click', function() {
+      if (currentIndex >= getMaxIndex()) {
+        currentIndex = 0;
+      } else {
+        currentIndex++;
+      }
+
+      updateSlider();
+    });
+
+    prev.addEventListener('click', function() {
+      if (currentIndex <= 0) {
+        currentIndex = getMaxIndex();
+      } else {
+        currentIndex--;
+      }
+
+      updateSlider();
+    });
+
+    window.addEventListener('resize', function() {
+      currentIndex = Math.min(currentIndex, getMaxIndex());
+      createDots();
+      updateSlider();
+    });
+
+    createDots();
+    updateSlider();
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Instagram Slider",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Follow Us on Instagram"
+    },
+    {
+      "type": "text",
+      "id": "handle",
+      "label": "Instagram Handle",
+      "default": "@track&tread"
+    },
+    {
+      "type": "image_picker",
+      "id": "prev_arrow",
+      "label": "Previous Arrow Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "next_arrow",
+      "label": "Next Arrow Image"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Instagram Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Instagram Slider"
+    }
+  ]
+}
+{% endschema %}

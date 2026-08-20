@@ -1,0 +1,110 @@
+<section class="testimonials">
+  <h2>{{ section.settings.heading }}</h2>
+
+  <div class="testimonials-grid">
+    {% for block in section.blocks %}
+      <div class="testimonial-item" {{ block.shopify_attributes }}>
+        <p>{{ block.settings.text }}</p>
+        <small>{{ block.settings.author }}</small>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+<style>
+  .testimonials {
+    background: #f5f5f5;
+  }
+
+  .testimonials h2 {
+    margin: 0;
+    padding: 5px;
+    font-size: 80px;
+    line-height: 1;
+    letter-spacing: -0.04em;
+        padding-bottom: 15px;
+  }
+
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid #aaa;
+    border-bottom: 1px solid #aaa;
+  }
+
+  .testimonial-item {
+    padding: 20px;
+    min-height: 80px;
+  }
+
+  .testimonial-item:not(:last-child) {
+    border-right: 1px solid #aaa;
+  }
+
+  .testimonial-item p {
+    margin: 0;
+    font-size: 20px;
+    line-height: 1.2;
+    color:#000;
+  }
+
+  .testimonial-item small {
+    display: block;
+    margin-top: 15px;
+    color: #777;
+  }
+
+  @media screen and (max-width: 749px) {
+    .testimonials h2 {
+      font-size: 44px;
+    }
+
+    .testimonials-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .testimonial-item:not(:last-child) {
+      border-right: 0;
+      border-bottom: 1px solid #aaa;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Testimonials",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "From the Fam"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text",
+          "default": "These are hands-down the most comfortable sneakers I've ever trained in. Zero break-in time, perfect fit."
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author",
+          "default": "Mark D., Toronto"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials"
+    }
+  ]
+}
+{% endschema %}
