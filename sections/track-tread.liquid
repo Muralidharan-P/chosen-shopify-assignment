@@ -1,0 +1,299 @@
+{% style %}
+  #track-tread-logo-{{ section.id }} {
+    --ttl-bg: {{ section.settings.background_color }};
+    --ttl-heading-color: {{ section.settings.heading_color }};
+    --ttl-top-text-color: {{ section.settings.top_text_color }};
+
+    background: var(--ttl-bg);
+    overflow: hidden;
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+
+  #track-tread-logo-{{ section.id }} .ttl-top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 0 {{ section.settings.top_row_padding_horizontal }}px;
+  }
+
+  #track-tread-logo-{{ section.id }} .ttl-top-text {
+    margin: 0;
+    color: var(--ttl-top-text-color);
+    font-size: {{ section.settings.top_text_font_size }}px;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  #track-tread-logo-{{ section.id }} .ttl-payment-logos {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: {{ section.settings.payment_logo_gap }}px;
+  }
+
+  #track-tread-logo-{{ section.id }} .ttl-payment-logo {
+    display: block;
+    height: {{ section.settings.payment_logo_size }}px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  #track-tread-logo-{{ section.id }} .ttl-heading {
+    margin: 0;
+    padding: 0 {{ section.settings.heading_padding_horizontal }}px;
+
+    color: var(--ttl-heading-color);
+    font-size: {{ section.settings.heading_font_size }}px;
+    font-weight: {{ section.settings.heading_font_weight }};
+    text-transform: uppercase;
+    text-align: center;
+    white-space: nowrap;
+    letter-spacing: -{{ section.settings.letter_spacing }}px;
+    line-height: {{ section.settings.line_height }};
+  }
+
+  @media screen and (max-width: 749px) {
+    #track-tread-logo-{{ section.id }} .ttl-heading {
+      font-size: {{ section.settings.mobile_heading_font_size }}px;
+    }
+  }
+{% endstyle %}
+
+<section
+  id="track-tread-logo-{{ section.id }}"
+  class="track-tread-logo"
+>
+  <div class="ttl-top-row">
+    {% if section.settings.top_left_text != blank %}
+      <p class="ttl-top-text">{{ section.settings.top_left_text }}</p>
+    {% endif %}
+
+    {% if section.blocks.size > 0 %}
+      <div class="ttl-payment-logos">
+        {% for block in section.blocks %}
+          {% if block.type == 'payment_logo' and block.settings.image != blank %}
+            {{
+              block.settings.image
+              | image_url: width: 200
+              | image_tag: class: 'ttl-payment-logo', loading: 'lazy', alt: block.settings.image.alt
+            }}
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+
+  {% if section.settings.heading != blank %}
+    <h1 class="ttl-heading">{{ section.settings.heading }}</h1>
+  {% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "Track & Tread Logo",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "top_left_text",
+      "label": "Top left text",
+      "default": "© Track&Tread 2025"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Main heading",
+      "default": "TRACK&TREAD"
+    },
+    {
+      "type": "header",
+      "content": "Payment logos"
+    },
+    {
+      "type": "range",
+      "id": "payment_logo_size",
+      "label": "Payment logo size",
+      "min": 10,
+      "max": 60,
+      "step": 1,
+      "default": 20,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "payment_logo_gap",
+      "label": "Gap between payment logos",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "default": 12,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "heading_font_size",
+      "label": "Desktop heading font size",
+      "min": 60,
+      "max": 220,
+      "step": 2,
+      "default": 160,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "mobile_heading_font_size",
+      "label": "Mobile heading font size",
+      "min": 30,
+      "max": 100,
+      "step": 1,
+      "default": 56,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "heading_font_weight",
+      "label": "Heading font weight",
+      "default": "800",
+      "options": [
+        { "value": "400", "label": "Regular" },
+        { "value": "500", "label": "Medium" },
+        { "value": "600", "label": "Semi Bold" },
+        { "value": "700", "label": "Bold" },
+        { "value": "800", "label": "Extra Bold" },
+        { "value": "900", "label": "Black" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "letter_spacing",
+      "label": "Letter spacing (tightness)",
+      "min": 0,
+      "max": 8,
+      "step": 0.5,
+      "default": 3,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "line_height",
+      "label": "Line height",
+      "min": 0.7,
+      "max": 1.1,
+      "step": 0.01,
+      "default": 0.85
+    },
+    {
+      "type": "range",
+      "id": "top_text_font_size",
+      "label": "Top text font size",
+      "min": 8,
+      "max": 24,
+      "step": 1,
+      "default": 12,
+      "unit": "px"
+    },
+    {
+      "type": "color",
+      "id": "top_text_color",
+      "label": "Top text color",
+      "default": "#1C1C1C"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#111111"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "default": 12,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "default": 8,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "top_row_padding_horizontal",
+      "label": "Top row horizontal padding",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "default": 24,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_horizontal",
+      "label": "Heading horizontal padding",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#F4F4F4"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "payment_logo",
+      "name": "Payment logo",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Logo image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Track & Tread Logo",
+      "blocks": [
+        { "type": "payment_logo" },
+        { "type": "payment_logo" },
+        { "type": "payment_logo" },
+        { "type": "payment_logo" },
+        { "type": "payment_logo" }
+      ]
+    }
+  ]
+}
+{% endschema %}

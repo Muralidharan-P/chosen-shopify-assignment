@@ -1,0 +1,249 @@
+<section
+  class="tt-footer-menus"
+  style="
+    --heading-size: {{ section.settings.heading_font_size }}px;
+    --heading-color: {{ section.settings.heading_color }};
+    --link-size: {{ section.settings.link_font_size }}px;
+    --link-color: {{ section.settings.link_color }};
+    --border-color: {{ section.settings.border_color }};
+    --bg-color: {{ section.settings.background_color }};
+  "
+>
+  <div class="tt-footer-menus__grid">
+
+    <div class="tt-footer-menus__column">
+      {% if section.settings.menu_1_heading != blank %}
+        <h3>{{ section.settings.menu_1_heading }}</h3>
+      {% endif %}
+
+      {% if section.settings.menu_1 != blank %}
+        <ul>
+          {% for link in section.settings.menu_1.links %}
+            <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+
+    <div class="tt-footer-menus__column">
+      {% if section.settings.menu_2_heading != blank %}
+        <h3>{{ section.settings.menu_2_heading }}</h3>
+      {% endif %}
+
+      {% if section.settings.menu_2 != blank %}
+        <ul>
+          {% for link in section.settings.menu_2.links %}
+            <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+
+    <div class="tt-footer-menus__column">
+      {% if section.settings.menu_3_heading != blank %}
+        <h3>{{ section.settings.menu_3_heading }}</h3>
+      {% endif %}
+
+      {% if section.settings.menu_3 != blank %}
+        <ul>
+          {% for link in section.settings.menu_3.links %}
+            <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+
+    <div class="tt-footer-menus__column">
+      {% if section.settings.menu_4_heading != blank %}
+        <h3>{{ section.settings.menu_4_heading }}</h3>
+      {% endif %}
+
+      {% if section.settings.menu_4 != blank %}
+        <ul>
+          {% for link in section.settings.menu_4.links %}
+            <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .tt-footer-menus {
+    width: 100%;
+    background: var(--bg-color);
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .tt-footer-menus__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .tt-footer-menus__column {
+    padding: 22px;
+    min-height: 120px;
+    box-sizing: border-box;
+  }
+
+  .tt-footer-menus__column:not(:last-child) {
+    border-right: 1px solid var(--border-color);
+  }
+
+  .tt-footer-menus__column h3 {
+    margin: 0 0 18px;
+    color: var(--heading-color);
+    font-size: var(--heading-size);
+    font-weight: 400;
+    line-height: 1.2;
+  }
+
+  .tt-footer-menus__column ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .tt-footer-menus__column li {
+    margin: 0 0 10px;
+    line-height: 1.2;
+  }
+
+  .tt-footer-menus__column a {
+    color: var(--link-color);
+    font-size: var(--link-size);
+    text-decoration: none;
+    line-height: 1.2;
+  }
+
+  .tt-footer-menus__column a:hover {
+    text-decoration: underline;
+  }
+
+  @media screen and (max-width: 749px) {
+    .tt-footer-menus__grid {
+      grid-template-columns: repeat(1, 1fr);
+    }
+
+    .tt-footer-menus__column {
+      min-height: auto;
+      padding: 15px 10px;
+    }
+
+    .tt-footer-menus__column:nth-child(2) {
+      border-right: 0;
+    }
+
+    .tt-footer-menus__column:nth-child(-n+2) {
+      border-bottom: 1px solid var(--border-color);
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Footer Menus",
+  "settings": [
+    {
+      "type": "text",
+      "id": "menu_1_heading",
+      "label": "Menu 1 heading",
+      "default": "Shop"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_1",
+      "label": "Menu 1"
+    },
+    {
+      "type": "text",
+      "id": "menu_2_heading",
+      "label": "Menu 2 heading",
+      "default": "Info"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_2",
+      "label": "Menu 2"
+    },
+    {
+      "type": "text",
+      "id": "menu_3_heading",
+      "label": "Menu 3 heading",
+      "default": "Legal"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_3",
+      "label": "Menu 3"
+    },
+    {
+      "type": "text",
+      "id": "menu_4_heading",
+      "label": "Menu 4 heading",
+      "default": "Social"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_4",
+      "label": "Menu 4"
+    },
+    {
+      "type": "header",
+      "content": "Style Settings"
+    },
+    {
+      "type": "range",
+      "id": "heading_font_size",
+      "label": "Heading font size",
+      "min": 8,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#888888"
+    },
+    {
+      "type": "range",
+      "id": "link_font_size",
+      "label": "Menu font size",
+      "min": 8,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "link_color",
+      "label": "Menu color",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border color",
+      "default": "#b8b8b8"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#f5f5f5"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer Menus"
+    }
+  ]
+}
+{% endschema %}
